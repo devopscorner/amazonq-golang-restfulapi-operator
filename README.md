@@ -119,7 +119,9 @@ is manually re-applied afterwards.
 
 1. Fork the repository
 2. Create a feature branch
-3. Make changes and add tests**NOTE:** Run `make help` for more information on all potential `make` targets
+3. Make changes and add tests
+
+**NOTE:** Run `make help` for more information on all potential `make` targets
 
 More information can be found via the [Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)
 
