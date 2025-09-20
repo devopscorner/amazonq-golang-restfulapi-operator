@@ -1,0 +1,132 @@
+---
+# Guestbook RestAPI with full MVC+R pattern
+apiVersion: apps.aws.com/v1
+kind: RestAPI
+metadata:
+  name: guestbook-api
+  namespace: default
+spec:
+  image: "nginx:1.21"
+  replicas: 3
+  envVars:
+    DATABASE_URL: "postgresql://postgres:5432/guestbook"
+    REDIS_URL: "redis://redis:6379"
+    LOG_LEVEL: "info"
+  
+  # MVC+R Pattern Components
+  model:
+    enabled: true
+    image: "guestbook/model:v1.2.0"
+    port: 8080
+    envVars:
+      COMPONENT_TYPE: "model"
+      DB_POOL_SIZE: "10"
+  
+  view:
+    enabled: true
+    image: "guestbook/view:v1.2.0"
+    port: 3000
+    envVars:
+      COMPONENT_TYPE: "view"
+      TEMPLATE_ENGINE: "react"
+  
+  controller:
+    enabled: true
+    image: "guestbook/controller:v1.2.0"
+    port: 8081
+    envVars:
+      COMPONENT_TYPE: "controller"
+      RATE_LIMIT: "100"
+  
+  repository:
+    enabled: true
+    image: "guestbook/repository:v1.2.0"
+    port: 8082
+    envVars:
+      COMPONENT_TYPE: "repository"
+      CACHE_TTL: "300"
+  
+  # Auto-scaling configuration
+  autoScaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 15
+    targetCPUUtilization: 70
+    targetMemoryUtilization: 80
+  
+  # Health monitoring
+  healthCheck:
+    enabled: true
+    path: "/health"
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  
+  # Blue-green deployment
+  blueGreen:
+    enabled: true
+    strategy: "automatic"
+    promotionTimeout: 300
+
+---
+# E-commerce RestAPI with selective components
+apiVersion: apps.aws.com/v1
+kind: RestAPI
+metadata:
+  name: ecommerce-api
+  namespace: default
+spec:
+  image: "alpine:latest"
+  replicas: 2
+  envVars:
+    DATABASE_URL: "mysql://mysql:3306/ecommerce"
+    PAYMENT_GATEWAY: "stripe"
+  
+  # Only enable specific components
+  model:
+    enabled: true
+    image: "ecommerce/model:v2.0.0"
+    port: 8080
+    envVars:
+      COMPONENT_TYPE: "model"
+  
+  view:
+    enabled: false  # Disable view component
+  
+  controller:
+    enabled: true
+    image: "ecommerce/controller:v2.0.0"
+    port: 8081
+    envVars:
+      COMPONENT_TYPE: "controller"
+  
+  repository:
+    enabled: true
+    image: "ecommerce/repository:v2.0.0"
+    port: 8082
+    envVars:
+      COMPONENT_TYPE: "repository"
+  
+  # Aggressive auto-scaling for high traffic
+  autoScaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 50
+    targetCPUUtilization: 60
+    targetMemoryUtilization: 70
+  
+  # Strict health monitoring
+  healthCheck:
+    enabled: true
+    path: "/api/health"
+    initialDelaySeconds: 45
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 2
+  
+  # Blue-green with manual promotion
+  blueGreen:
+    enabled: true
+    strategy: "manual"
+    promotionTimeout: 600

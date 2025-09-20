@@ -1,0 +1,65 @@
+apiVersion: apps.aws.com/v1
+kind: RestAPI
+metadata:
+  labels:
+    app.kubernetes.io/name: amazonq-golang-restfulapi-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: guestbook-restapi
+spec:
+  image: "nginx:1.21"
+  replicas: 2
+  envVars:
+    DATABASE_URL: "postgresql://localhost:5432/guestbook"
+    REDIS_URL: "redis://localhost:6379"
+  
+  # MVC+R Pattern Components
+  model:
+    enabled: true
+    image: "guestbook/model:v1.0.0"
+    port: 8080
+    envVars:
+      COMPONENT_TYPE: "model"
+  
+  view:
+    enabled: true
+    image: "guestbook/view:v1.0.0"
+    port: 3000
+    envVars:
+      COMPONENT_TYPE: "view"
+  
+  controller:
+    enabled: true
+    image: "guestbook/controller:v1.0.0"
+    port: 8081
+    envVars:
+      COMPONENT_TYPE: "controller"
+  
+  repository:
+    enabled: true
+    image: "guestbook/repository:v1.0.0"
+    port: 8082
+    envVars:
+      COMPONENT_TYPE: "repository"
+  
+  # Auto-scaling configuration
+  autoScaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilization: 70
+    targetMemoryUtilization: 80
+  
+  # Health monitoring
+  healthCheck:
+    enabled: true
+    path: "/health"
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  
+  # Blue-green deployment
+  blueGreen:
+    enabled: true
+    strategy: "automatic"
+    promotionTimeout: 300
