@@ -13,7 +13,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	restapiv1 "github.com/aws/restapi-operator/api/v1"
+	restapiv1 "github.com/devopscorner/restapi-operator/api/v1"
 )
 
 type BlueGreenManager struct {

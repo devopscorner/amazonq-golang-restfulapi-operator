@@ -1,4 +1,4 @@
-module github.com/aws/restapi-operator
+module github.com/devopscorner/restapi-operator
 
 go 1.24.0
 

@@ -37,8 +37,8 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	appsv1 "github.com/aws/restapi-operator/api/v1"
-	"github.com/aws/restapi-operator/internal/controller"
+	appsv1 "github.com/devopscorner/restapi-operator/api/v1"
+	"github.com/devopscorner/restapi-operator/internal/controller"
 	// +kubebuilder:scaffold:imports
 )
 

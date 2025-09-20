@@ -27,7 +27,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	appsv1 "github.com/aws/restapi-operator/api/v1"
+	appsv1 "github.com/devopscorner/restapi-operator/api/v1"
 )
 
 var _ = Describe("RestAPI Controller", func() {

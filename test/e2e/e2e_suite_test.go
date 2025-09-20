@@ -25,7 +25,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/aws/restapi-operator/test/utils"
+	"github.com/devopscorner/restapi-operator/test/utils"
 )
 
 var (
